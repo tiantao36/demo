@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+
+
+{% block left-side %}
+    <div class="col-md-2">
+        <div class="panel-group">
+            <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">测试面板</h3>
+                  </div>
+                  <div class="list-group">
+                        <a href="/envset.html" class="list-group-item command" id="envset-command" style="color:#ac2925;font-weight:bold;">环境管理</a>
+                        <a href="/host.html" class="list-group-item command" id="host-command">主机管理</a>
+                        <a href="/cmd.html" class="list-group-item command" id="cmd-command">执行任务</a>
+                  </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block right-side %}
+    <div class="col-md-10">
+        {% block envmanager %}
+            <div class="envset-command" id="envset-command_id">
+                    <form action="/gadd/" method="POST" class="form-inline" novalidate>
+                            {% csrf_token %}
+                        <div class="form-group">
+                            <label  for="title_id">添加环境:</label>
+                            <input name="title" id="title_id" type="text" class="form-control input-control"  placeholder="请输入环境">
+                        </div>
+                        <button type="submit" class="btn btn-primary">提交</button>
+                    </form>
+
+                    <div class="table-responsive" id="host-table" style="margin-top: 10px;">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>环境</th>
+                                <th>操作</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for group in hgroup_obj %}
+                                    <tr>
+                                        <td>{{ group.title }}</td>
+                                        <td><a href='/gdelete/{{ group.id }}/'>删除</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                     <!--分页-->
+                    <div class="row">
+                        <nav aria-label="Page navigation">
+                          <ul class="pagination">
+                                {{ page_str|safe }}
+                          </ul>
+                        </nav>
+                    </div>
+                </div>
+        {% endblock %}
+    </div>
+{% endblock %}

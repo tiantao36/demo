@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>系统管理</title>
+    <link rel="icon" href="/static/img/logo-noword.png">
+    <link href="/static/css/bootstrap.css" rel="stylesheet" />
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <style>
+        body{
+            margin-top: 70px;
+        }
+        .navbar-brand{
+            color: #ffffff !important;
+        }
+        .form-info:after{
+            content: '';
+            display: block;
+            margin-bottom: 10px;
+        }
+        .input-control-panel{
+            width: 160px !important;
+        }
+        .input-control-tatal{
+            width: 160px !important;
+        }
+        .input-control{
+            width: 100px !important;
+        }
+         /*固定结果栏*/
+        .rigth-side-fixed{
+            position: fixed;
+        }
+
+
+        @media all and (max-width: 1153px){
+            #system_env_group{
+                display: none;
+            }
+            #host_type_group{
+                display: none;
+            }
+            .input-control-tatal{
+                width: 100px !important;
+            }
+        }
+
+         /*屏幕太小是让结果栏回到正常流*/
+        @media all and (max-width: 991px){
+            #system_env_group{
+                display: none;
+            }
+            #host_type_group{
+                display: none;
+
+            }
+            .input-control{
+                width: 65px !important;
+            }
+            .input-control-panel{
+                width: 160px !important;
+                display: inline-block;
+            }
+            .rigth-side-fixed{
+                position: static;
+            }
+
+        }
+        /*隐藏搜索栏*/
+         @media all and (max-width: 768px){
+            .navbar .navbar-form{
+                display: none;
+            }
+         }
+        @media all and (max-width: 468px){
+            #system_env_group{
+                display: none;
+            }
+            #host_type_group{
+                display: none;
+
+            }
+
+        }
+        @media all and (max-width: 444px){
+            #system_env_group{
+                display: none;
+            }
+            #host_type_group{
+                display: none;
+
+            }
+            .container-fluid{
+                width: 444px !important;
+            }
+        }
+        .backttop{
+			position: fixed;
+			right: 15px;
+			bottom:15px;
+		}
+    </style>
+</head>
+<body>
+<!--
+    一个大容器
+-->
+<div class="container-fluid">
+    <!--顶部导航-->
+    {% block nav %}
+        <nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                      </button>
+                      <a class="navbar-brand" href="javascript:;">麦田运维管理系统</a>
+                </div>
+                {% block nav_from-table %}
+                {% endblock %}
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                      <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/">首页</a></li>
+                        <li><a href="/help.html">帮助</a></li>
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">系统管理<span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+
+                            <li><a href="#mymodal" data-toggle="modal">修改密码</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/logout/">登出系统</a></li>
+                             <!--
+                              data-toggle="modal" data-target="#myModal"
+                              -->
+                          </ul>
+                        </li>
+                      </ul>
+                </div>
+            </div>
+        </nav>
+        <!--修改密码通过模态对话框实现-->
+        <div class="modal fade" tabindex="-1"  id="mymodal">
+          <div class="modal-dialog" role="document" style="margin-top: 100px;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">修改密码</h4>
+              </div>
+              <div class="modal-body">
+                     <form class="form-horizontal" action="/changpas/" method="POST" novalidate>
+                          {% csrf_token %}
+                          <div class="form-group">
+                                <label for="editpassword_id-1" class="col-sm-3 control-label">输入新密码</label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control" id="editpassword_id-1" placeholder="Password">
+                                </div>
+                          </div>
+                          <div class="form-group">
+                                <label for="editpassword_id-2" class="col-sm-3 control-label">确认新密码</label>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control" id="editpassword_id-2" placeholder="Password">
+                                </div>
+                          </div>
+                          <div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-5">
+                                    <button type="button" class="btn btn-primary">提交</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">退出</button>
+
+                                </div>
+                          </div>
+                    </form>
+
+
+              </div>
+              <div class="modal-footer">
+
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    {% endblock %}
+    {% block content %}
+        {% block left-side %}
+        {% endblock %}
+
+        {% block right-side %}
+        {% endblock %}
+    {% endblock %}
+</div>
+<div class="backttop">
+    <img src="./static/img/top.png">
+
+</div>
+<script>
+    //+---------------------------------------------------
+    //| 日期时间检查
+    //| 格式为：YYYY-MM-DD HH:MM:SS 2018-11-29 10:20:20
+    //+---------------------------------------------------
+    function CheckDateTime(timestring) {
+        var reg = /^(\d+)-(\d{1,2})-(\d{1,2})\s(\d{1,2}):(\d{1,2}):(\d{1,2})$/
+        var r = timestring.match(reg);
+        if(r==null){
+            return false;
+        }
+        r[2]=r[2]-1;
+        var d= new Date(r[1],r[2],r[3],r[4],r[5],r[6]);
+        if(d.getFullYear()!=r[1]){
+            return false;
+        }
+        if(d.getMonth()!=r[2]){
+            return false;
+        }
+        if(d.getDate()!=r[3]){
+            return false;
+        }
+        if(d.getHours()!=r[4]){
+            return false;
+        }
+        if(d.getMinutes()!=r[5]){
+            return false;
+        }
+        if(d.getSeconds()!=r[6]){
+            return false;
+        }
+        return true;
+    }
+    function CreateTime() {
+        var myDate = new Date();
+        //return myDate.getFullYear()+'-'+myDate.getMonth()+'-'+myDate.getDate()+' '+myDate.getHours()+':'+myDate.getMinutes()+':'+myDate.getSeconds()
+        var myDate = new Date();
+        year=myDate.getFullYear()
+        month=myDate.getMonth()+1
+        console.log(month)
+        if(month<10){
+            month='0'+month
+        }
+        date=myDate.getDate()
+        if(date<10){
+            date='0'+date
+        }
+        hours=myDate.getHours()
+        if(hours<10){
+            hours='0'+hours
+        }
+        minutes=myDate.getMinutes()
+        if(minutes<10){
+            minutes='0'+minutes
+        }
+        seconds=myDate.getSeconds()
+        if(seconds<10){
+            seconds='0'+seconds
+        }
+        datatime=year+'-'+month+'-'+date+' '+hours+':'+minutes+':'+seconds
+        console.log(datatime)
+        console.log( new Date())
+        return datatime
+    }
+
+    $(function () {
+        /*任务面板颜色*/
+        //$('#host-command_id').hide()
+        //$('#envset-command_id').hide()
+        //$('#cmd-command').css({'color':'#ac2925','font-weight':'bold'})
+
+        /*任务面板点击过程中颜色变化*/
+        //$('.command').click(function () {
+        //    $(this).css({'color':'#ac2925','font-weight':'bold'})
+        //    $(this).siblings().css({'color':'#0C0C0C','font-weight':'normal'})
+        //})
+        /*任务面板点击右侧内容切换*/
+        //$('#host-command').click(function () {
+        //    $('#host-command_id').show()
+        //    $('#host-command_id').siblings().not($('#host-command_id')).hide()
+        //
+        //})
+        //$('#cmd-command').click(function () {
+        //    $('#cmd-command_id').show()
+        //    $('#cmd-command_id').siblings().not($('#cmd-command_id')).hide()
+        //})
+        //$('#envset-command').click(function () {
+        //    $('#envset-command_id').show()
+        //    $('#envset-command_id').siblings().not($('#envset-command_id')).hide()
+        //})
+       $('.backttop').hide()
+        $(window).scroll(function() {
+            var st = $(window).scrollTop();
+            console.log(st)
+            if (st >= 1400) {
+                $('.backttop').show()
+            } else {
+                $('.backttop').hide()
+            }
+        })
+        $('.backttop').on('click',function () {
+		    document.documentElement.scrollTop=0;
+		    $('.backttop').hide()
+	    })
+        /*获取执行界面panel标签高度*/
+        $('.panel-side').each(function () {
+           console.log($(this).outerHeight(true))
+        })
+        /*
+        执行按钮事件绑定
+        */
+        //+---------------------------------------------------
+        //1，执行接口
+        //    panel_table_exec_id
+        //    total_panel_table_exec_id
+        //2，结果统计
+        //   total_panel_exec_id
+        //+---------------------------------------------------
+        /*
+            绑定通过父标签事件委派
+            <div class="col-md-9" id="panel-exec_id">
+        */
+
+
+        //$('#panel-exec_id').on('click','#panel_table_exec_id',function () {
+        //    var input_date_time=$(this).next().val()
+        //    /*验证时间*/
+        //    CheckDateTime(input_date_time)
+        //    console.log(input_date_time)
+        //})
+
+        var datatime=CreateTime()
+        $('.input-warn').children('span').html('正确格式样例 <mark>'+datatime+'</mark>')
+
+        $('#panel-exec_id').on('click','#total_panel_table_exec_id',function () {
+            var input_date_time=$(this).next().val()
+            console.log(input_date_time)
+            //$(this).parent().parent().parent().find('.input-warn').children('span').html('')
+
+            //$('.input-warn').hide()
+
+            $('#exec_result_id').html('')
+            var host_info_id_obj=$(this).parent().parent().parent().parent().parent().prev().find('.host_info_id')
+            var system_env_name=$(this).parent().parent().parent().parent().parent().siblings().find('.panel-title').text()
+            //+---------------------------------------------------
+            //获取面板内主机的ip
+            //+---------------------------------------------------
+            //console.log(host_info_id_obj)
+
+            var task_id_list=new  String()
+            $.each(host_info_id_obj,function (index, itemobj) {
+                //task_id_list.push($(itemobj).prop('id'))
+                task_id_list=$(itemobj).prop('id')+'-'+task_id_list
+            })
+            if(CheckDateTime(input_date_time)){
+                /*
+                var formData = new FormData()
+                var input_date_time=$(this).next().val()
+                formData.append('id_list',data)
+                formData.append('data_time',input_date_time)
+                */
+
+
+                //var host_info_id_obj=$(this).parent().parent().parent().parent().parent().prev().find('.host_info_id')
+                //var system_env_name=$(this).parent().parent().parent().parent().parent().siblings().find('.panel-title').text()
+                ////+---------------------------------------------------
+                ////获取面板内主机的ip
+                ////+---------------------------------------------------
+                //console.log(host_info_id_obj)
+                //var task_id_list=new  String()
+                //$.each(host_info_id_obj,function (index, itemobj) {
+                //    //task_id_list.push($(itemobj).prop('id'))
+                //    task_id_list=$(itemobj).prop('id')+'-'+task_id_list
+               //})
+
+
+                //+---------------------------------------------------
+                //提交ajax
+                //+---------------------------------------------------
+                /*
+                $.ajax({
+                    url:'/task/',
+                    type:'POST',
+                    data:formdata, 不能json
+                    processData:false,//jQuery不要处理数据
+                    dataType: 'JSON',
+                    contenType:falese,//jQuery不要设置内容类型
+                    success:function(arg){
+                        console.log(arg);
+                    }
+                })
+                */
+                //+----------------------------------
+                //   2017-10-20 10:20:20
+                //+----------------------------------
+                //$('#exec_result_id').html('');
+
+
+                $.ajax({
+                    url:'/task/',
+                    type:'POST',
+                    data:{
+                        'system_env_name':system_env_name,
+                        'input_date_time':input_date_time,
+                        'task_id_list':task_id_list,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    dataType: 'JSON',
+                    success:function(resutldata){
+                        console.log(resutldata)
+                        $('#exec_result_id').html(resutldata);
+                    }
+                })
+
+            }else {
+                //$(this).parent().parent().parent().find('.input-warn').show()
+                //var datatime=CreateTime()
+                //$(this).parent().parent().parent().find('.input-warn').children('span').html('正确格式样例 <mark>'+datatime+'</mark>')
+                //$('.input-warn').children('span').html('正确格式样例 <mark>'+datatime+'</mark>')
+                $(this).parent().parent().parent().find('.input-warn').children('span').find('mark').css('color','#a94442')
+                $('mark').not($(this).parent().parent().parent().find('.input-warn').children('span').find('mark')).css('color','#000000')
+                $('.host_info_datetime').html('')
+                $.ajax({
+                    url:'/check/',
+                    type:'POST',
+                    data:{
+                        'task_id_list':task_id_list,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    dataType: 'JSON',
+                    success:function(resutldata){
+                        $.each(resutldata,function (i,data) {
+                            $.each(data,function (id,data_time) {
+                                $.each(host_info_id_obj,function (index, itemobj) {
+                                    if($(itemobj).prop('id')==id){
+                                        console.log(id,data_time)
+                                        $(itemobj).siblings().html('<mark>'+data_time[1]+'</mark>')
+                                    }
+                                })
+                            })
+                        })
+
+                    }
+                })
+            }
+        })
+        //$('#total_panel_exec_id').click(function () {
+        //    var input_date_time=$(this).next().val()
+        //    if(CheckDateTime(input_date_time)){
+        //        console.log($('.panel-exec_id col-md-5'))
+        //    }
+        //
+        //})
+        /*---end---*/
+
+        //$('.input-warn').hide()
+        // 鼠标事件
+        //$('#panel-exec_id').on('mouseover','#total_panel_table_exec_id',function () {
+        //     $('.panel-warn').hide()
+        //})
+        //$('#panel-exec_id').on('mouseout','#total_panel_table_exec_id',function () {
+
+        //    $('.panel-warn').show()
+        //})
+        $('.start_server').click(function () {
+            window.location='http://172.16.7.180:9090/jenkins/'
+        })
+    })
+
+
+</script>
+</body>
+</html>

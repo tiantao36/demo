@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block nav_from-table %}
+    <form class="navbar-form navbar-left" method="POST" action="/tsearch.html">
+        {% csrf_token %}
+        <div class="form-group">
+            <input name="search_group_name" type="text" class="form-control" placeholder="搜索执行环境 例如 10">
+        </div>
+        <button type="submit" class="btn btn-default">搜索</button>
+    </form>
+{% endblock %}
+
+
+{% block left-side %}
+    <div class="col-md-2">
+        <div class="panel-group">
+            <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">测试面板</h3>
+                  </div>
+                  <div class="list-group">
+                        <a href="/envset.html" class="list-group-item command" id="envset-command">环境管理</a>
+                        <a href="/host.html" class="list-group-item command" id="host-command">主机管理</a>
+                        <a href="/cmd.html" class="list-group-item command" id="cmd-command" style="color:#ac2925;font-weight:bold;">执行任务</a>
+                  </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block right-side %}
+    <div class="col-md-10">
+        {% block taskmanager %}
+            <div class="cmd-command" id="cmd-command_id">
+                    <div class="container-fluid">
+                            <div class="col-md-8" id="panel-exec_id">
+{#                                {% for data_obj in data_list %}#}
+{#                                    <div class="col-md-12">#}
+{#                                        {% for system_env,data in data_obj.items %}#}
+{#                                            {% if data %}#}
+{#                                                <div class="panel panel-primary panel-side">#}
+{#                                                <div class="panel-heading">#}
+{#                                                  <h4 class="panel-title">{{ system_env }}</h4>#}
+{#                                                </div>#}
+{#                                                <div class="table-responsive">#}
+{#                                                    <table class="table table-bordered">#}
+{#                                                        <tr>#}
+{#                                                            {% for host_info in data %}#}
+{#                                                                {% for host_info_id,host_info_list in  host_info.items%}#}
+{#                                                                    <tr>#}
+{#                                                                        <td id="{{ host_info_id }}" class="host_info_id">{{  host_info_list.0 }}</td>#}
+{#                                                                        <td>{{ host_info_list.1 }}</td>#}
+{#                                                                    </tr>#}
+{#                                                                {% endfor %}#}
+{#                                                            {% endfor %}#}
+{#                                                        </tr>#}
+{#                                                    </table>#}
+{#                                                </div>#}
+{#                                                <div class="panel-footer">#}
+{#                                                    <div class="btn-group">#}
+{#                                                        <ul class="list-group" style="margin: 0px;padding: 0px;">#}
+{#                                                            <li class="list-group-item" style="margin: 0px;padding: 0px;">#}
+{#                                                                <div class="btn-group">#}
+{#                                                                    <button id="total_panel_table_exec_id" class="btn btn-danger" href="#">全部执行</button>#}
+{#                                                                    <input type="text" class="form-control input-control-panel" placeholder="请输入时间">#}
+{#                                                                </div>#}
+{#                                                            </li>#}
+{#                                                            <li class="list-group-item input-warn" style="margin: 0px;padding: 0px;">#}
+{#                                                                <span class="help-block">#}
+{#                                                                </span>#}
+{#                                                            </li>#}
+{#                                                        </ul>#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            {% endif %}#}
+{#                                        {% endfor %}#}
+{#                                    </div>#}
+{#                                {% endfor %}#}
+                                {% for data_obj in data_list %}
+                                    <div class="col-md-12">
+                                        {% for system_env,data in data_obj.items %}
+                                            {% if data %}
+                                                <div class="panel panel-primary panel-side">
+                                                <div class="panel-heading">
+                                                  <h4 class="panel-title">{{ system_env }}</h4>
+                                                </div>
+
+                                                <table class="table table-bordered">
+                                                    <tr>
+                                                        {% for host_info in data %}
+                                                            <tr>
+                                                                <td id="{{ host_info.id }}" class="host_info_id">{{  host_info.ipaddr }}</td>
+                                                                <td class="host_info_datetime"></td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tr>
+                                                </table>
+                                                <div class="panel-footer">
+                                                    <div class="btn-group">
+                                                        <ul class="list-group" style="margin: 0px;padding: 0px;">
+                                                            <li class="list-group-item" style="margin: 0px;padding: 0px;">
+                                                                <div class="btn-group">
+                                                                    <button id="total_panel_table_exec_id" class="btn btn-danger" href="#">全部执行</button>
+                                                                    <input type="text" class="form-control input-control-panel" placeholder="请输入时间">
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-group-item input-warn" style="margin: 0px;padding: 0px;">
+                                                                <span class="help-block">
+
+                                                                </span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-4">
+                                <ul class="list-group rigth-side-fixed">
+                                   <li class="list-group-item" style="margin: 0px;padding: 0px;">
+                                        <div class="panel-group">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title">指令选择</h3>
+                                                </div>
+                                                <div class="panel-body">
+
+                                                    <ul class="list-group">
+                                                        <li class="list-group-item">
+                                                            <form>
+                                                                <div class="form-group">
+                                                                    <div class="radio">
+                                                                        <label>
+                                                                            <input name="action" value="1" type="radio" checked>修改时间
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="radio start_server">
+                                                                        <label>
+                                                                            <input name="action" value="2" type="radio" >启动服务
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="radio">
+                                                                        <label>
+                                                                            <input name="action" value="3" type="radio" disabled>执行jobs
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="radio">
+                                                                        <label>
+                                                                            <input name="action" value="4" type="radio" disabled>查询jobs
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                   <li class="list-group-item" style="margin: 0px;padding: 0px;">
+                                        <div class="btn-group">
+                                            <button id="total_panel_exec_id" disabled class="btn btn-danger" href="#">全部执行</button>
+                                            <input disabled type="text" class="form-control input-control-tatal" placeholder="请输入时间">
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item" style="margin: 0px;padding: 0px;">
+                                        <h5 class="page-header">执行失败将显示主机地址</h5>
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>环境</th>
+                                                        <th>结果</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="exec_result_id">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                    </div>
+                </div>
+        {% endblock %}
+    </div>
+{% endblock %}

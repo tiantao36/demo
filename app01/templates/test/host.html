@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+
+
+{% block left-side %}
+    <div class="col-md-2">
+        <div class="panel-group">
+            <div class="panel panel-primary">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">测试面板</h3>
+                  </div>
+                  <div class="list-group">
+                        <a href="/envset.html" class="list-group-item command" id="envset-command">环境管理</a>
+                        <a href="/host.html" class="list-group-item command" id="host-command" style="color:#ac2925;font-weight:bold;">主机管理</a>
+                        <a href="/cmd.html" class="list-group-item command" id="cmd-command">执行任务</a>
+                  </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block right-side %}
+    <div class="col-md-10">
+        {% block hostmanager %}
+                <div class="host-command" id="host-command_id">
+                    <form action="/hadd/" method="POST" class="form-inline" novalidate>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label  for="ipaddr_id">IP地址:</label>
+                            <input name="ipaddr" id="ipaddr_id" type="text" class="form-control input-control"  placeholder="ip地址">
+                        </div>
+                        <div class="form-group">
+                            <label  for="username_id">用户名:</label>
+                            <input name="username" id="username_id" type="text" class="form-control input-control" placeholder="用户名">
+                        </div>
+                        <div class="form-group">
+                            <label for="password_id">密码:</label>
+                            <input name="password" id="password_id" type="password" class="form-control input-control" placeholder="密码">
+                        </div>
+                        <div class="form-group">
+                            <label for="port_id">端口:</label>
+                            <input name="port" id="port_id" type="text" class="form-control input-control" placeholder="端口">
+                        </div>
+                        <div class="form-group" id="system_env_group">
+                             <label for="system_env_id">环境:</label>
+                              <select class="form-control input-control" name="system_env" id="system_env_id">
+                                  {% for hgroup in hgroup_obj %}
+                                      <option value={{ hgroup.id }}>{{ hgroup.title }}</option>
+                                  {% endfor %}
+                               </select>
+                        </div>
+                        <div class="form-group" id="host_type_group">
+                             <label for="host_type_id">系统:</label>
+                              <select  name="host_type" class="form-control input-control" id="host_type_id">
+                                  <option value="1">linux</option>
+                                  <option value="0">windows</option>
+                               </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">提交</button>
+                    </form>
+
+                    <div class="table-responsive" id="host-table" style="margin-top: 10px;">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                    {% for title in title_obj %}
+                                        <th>{{ title }}</th>
+                                    {% endfor %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in data_obj %}
+                                    <tr>
+                                        <td>{{ item.ipaddr }}</td>
+                                        <td>{{ item.username }}</td>
+                                        <td>{{ item.password }}</td>
+                                        <td>{{ item.port }}</td>
+                                        <td>{{ item.system_env.title }}</td>
+                                        <td>{{ item.get_host_type_display }}</td>
+                                        <td><a href='/hdelete/{{ item.id }}/'>删除</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--分页-->
+                    <div class="row">
+                        <nav aria-label="Page navigation">
+                          <ul class="pagination">
+                                {{ page_str|safe }}
+                          </ul>
+                        </nav>
+                    </div>
+                </div>
+        {% endblock %}
+    </div>
+{% endblock %}
